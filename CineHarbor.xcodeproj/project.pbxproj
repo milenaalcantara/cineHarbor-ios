@@ -209,6 +209,7 @@
 		};
 		F3B5396E2D88641A008708A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3036DA72D9D63D600D85327 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -273,6 +274,7 @@
 		};
 		F3B5396F2D88641A008708A0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3036DA72D9D63D600D85327 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

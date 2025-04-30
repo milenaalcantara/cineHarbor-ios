@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum MediaType: String {
     case all = "all"
@@ -13,12 +14,12 @@ enum MediaType: String {
     case tv = "tv"
 }
 
-class API {
-//    static let shared = API()
+class APIManager {
+    static let shared = APIManager()
     
     private let baseURL = "https://api.themoviedb.org/3/"
-    private let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as! String
-    
+    private let imageURL = "https://image.tmdb.org/t/p/w500"
+    private let apiKey = "7cd33f57ce1734a36e86edb23ecef15f"
     
     // https://api.themoviedb.org/3/trending/all/week?api_key=SUA_API_KEY&language=pt-BR
     func getTrendingURL(_ mediaType: MediaType) -> URL? {
@@ -31,6 +32,7 @@ class API {
             URLQueryItem(name: "api_key", value: apiKey),
             URLQueryItem(name: "language", value: "pt-BR")
         ]
+        components.queryItems = queryItems
         
         return components.url
     }
@@ -70,4 +72,28 @@ class API {
         task.resume()
     }
 
+    func loadImage(of item: TrendingItem, into imageView: UIImageView) {
+        guard let posterPath = item.posterPath, let url = URL(string: "\(imageURL)\(posterPath)") else {
+            print("❌ URL inválida")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Erro ao carregar imagem:", error?.localizedDescription ?? "desconhecido")
+                return
+            }
+            
+            print("DATA: \(data)")
+            
+            if let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    imageView.image = image
+                }
+            } else {
+                print("❌ Não foi possível converter Data em UIImage")
+            }
+        }
+        task.resume()
+    }
 }
