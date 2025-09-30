@@ -22,8 +22,7 @@ class TabBarViewController: UITabBarController {
             tag: 2
         )
         
-        tabBar.backgroundColor = .theme.barColor
-        tabBar.tintColor = .label
+        tabBar.tintColor = .white
         
         setViewControllers([trending, favorites], animated: true)
     }
@@ -34,10 +33,12 @@ class TabBarViewController: UITabBarController {
         iconName: String,
         tag: Int
     ) -> UINavigationController {
-        let item = UINavigationController(rootViewController: viewControler)
-        item.navigationBar.tintColor = .label
-        item.tabBarItem = UITabBarItem(title: title, image: UIImage(systemName: iconName), tag: tag)
-        return item
+        let nav = UINavigationController(rootViewController: viewControler)
+        nav.navigationBar.tintColor = .label
+        
+        // Garantir que a imagem esteja em modo template para receber tint
+        let image = UIImage(systemName: iconName)?.withRenderingMode(.alwaysTemplate)
+        nav.tabBarItem = UITabBarItem(title: title, image: image, tag: tag)
+        return nav
     }
 }
-

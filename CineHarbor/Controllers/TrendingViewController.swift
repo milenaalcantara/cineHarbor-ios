@@ -70,6 +70,8 @@ extension TrendingViewController: UICollectionViewDataSource, UICollectionViewDe
             withReuseIdentifier: TrendingCell.identifier,
             for: indexPath
         ) as? TrendingCell else { return UICollectionViewCell() }
+        
+        cell.delegate = self // 🔑 importante
         cell.configure(with: items[indexPath.item])
         return cell
     }
@@ -82,10 +84,15 @@ extension TrendingViewController: UICollectionViewDataSource, UICollectionViewDe
         let width = (collectionView.bounds.width - 48) / 2
         return CGSize(width: width, height: width * 1.6)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+}
+
+
+extension TrendingViewController: TrendingCellDelegate {
+    func trendingCellDidTapDetails(_ cell: TrendingCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let detailVC = DetailViewController(at: items[indexPath.item])
         detailVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
+

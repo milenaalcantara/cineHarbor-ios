@@ -84,8 +84,6 @@ class APIManager {
                 return
             }
             
-            print("DATA: \(data)")
-            
             if let image = UIImage(data: data) {
                 DispatchQueue.main.async {
                     imageView.image = image

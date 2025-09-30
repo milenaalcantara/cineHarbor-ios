@@ -14,7 +14,10 @@ struct TrendingItem: Decodable {
     let mediaType: String
     let title: String
     let overview: String
+    let year: String
+    let voteAverage: Double
     let posterPath: String?
+    var isFavorite: Bool = false
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -22,7 +25,10 @@ struct TrendingItem: Decodable {
         case title
         case overview
         case posterPath = "poster_path"
+        case year = "release_date"
+        case firstAirDate = "first_air_date" // usado por séries
         case name // usado por séries
+        case voteAverage = "vote_average"
     }
 
     init(from decoder: Decoder) throws {
@@ -31,6 +37,7 @@ struct TrendingItem: Decodable {
         mediaType = try container.decode(String.self, forKey: .mediaType)
         overview = try container.decode(String.self, forKey: .overview)
         posterPath = try? container.decode(String.self, forKey: .posterPath)
+        voteAverage = try container.decode(Double.self, forKey: .voteAverage)
 
         // Ajusta o título dependendo se é filme ou série
         if let movieTitle = try? container.decode(String.self, forKey: .title) {
@@ -39,6 +46,14 @@ struct TrendingItem: Decodable {
             title = showName
         } else {
             title = "Título desconhecido"
+        }
+        
+        if let releaseDate = try? container.decode(String.self, forKey: .year) {
+            year = releaseDate
+        } else if let firstAirDate = try? container.decode(String.self, forKey: .firstAirDate) {
+            year = firstAirDate
+        } else {
+            year = ""
         }
     }
 }
