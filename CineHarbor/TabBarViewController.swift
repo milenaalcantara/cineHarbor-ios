@@ -16,7 +16,7 @@ class TabBarViewController: UITabBarController {
         )
         
         let favorites = configureTabItem(
-            viewControler: FavoriteViewController(),
+            viewControler: FavoritesViewController(),
             title: "Favoritos",
             iconName: "heart",
             tag: 2

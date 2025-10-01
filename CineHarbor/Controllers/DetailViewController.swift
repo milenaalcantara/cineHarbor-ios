@@ -1,10 +1,3 @@
-//
-//  DetailViewController.swift
-//  CineHarbor
-//
-//  Created by Milena on 30/04/2025.
-//
-
 import UIKit
 
 class DetailViewController: UIViewController {
@@ -16,39 +9,38 @@ class DetailViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError() }
     
     override func loadView() {
-        super.viewDidLoad()
         self.view = detailView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = item.title 
+        title = item.title
         view.backgroundColor = .theme.backgroundColor
         
-        // Botão à direita
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "heart"),
-            style: .plain,     // estilo
-            target: self,      // quem vai receber a ação
-            action: #selector(didTapFavorite) // função que será chamada
+            image: UIImage(systemName: item.isFavorite ? "heart.fill" : "heart"),
+            style: .plain,
+            target: self,
+            action: #selector(didTapFavorite)
         )
         navigationItem.rightBarButtonItem?.tintColor = .systemRed
         
-        // Configura a view com o item recebido
         detailView.configure(with: item)
+        
+        FavoritesViewModel.shared.addObserver { [weak self] in
+            guard let self = self else { return }
+            if let updated = FavoritesViewModel.shared.items.first(where: { $0.id == self.item.id }) {
+                self.item = updated
+                self.detailView.configure(with: updated)
+                self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: updated.isFavorite ? "heart.fill" : "heart")
+            }
+        }
     }
     
     @objc private func didTapFavorite() {
-        item.isFavorite.toggle()
-        if item.isFavorite {
-            navigationItem.rightBarButtonItem?.image = UIImage(systemName: "heart.fill")
-            return
-        }
-        navigationItem.rightBarButtonItem?.image = UIImage(systemName: "heart")
+        FavoritesViewModel.shared.toggleFavorite(for: item)
     }
 }
