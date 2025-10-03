@@ -1,7 +1,7 @@
 import Foundation
 
-final class FavoritesViewModel {
-    static let shared = FavoritesViewModel()
+final class TrendingViewModel {
+    static let shared = TrendingViewModel()
     
     private(set) var items: [TrendingItem] = []
     

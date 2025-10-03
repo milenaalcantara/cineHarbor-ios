@@ -30,7 +30,6 @@ class DetailView: UIView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10, weight: .regular)
         label.numberOfLines = 0
-        label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -40,7 +39,6 @@ class DetailView: UIView {
         label.font = UIFont.systemFont(ofSize: 10, weight: .bold)
         label.textColor = .systemGreen
         label.numberOfLines = 0
-        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -138,7 +136,6 @@ extension DetailView: ViewCode {
             titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
             
             hStack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            hStack.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
             hStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             
             overviewText.topAnchor.constraint(equalTo: hStack.bottomAnchor, constant: 30),

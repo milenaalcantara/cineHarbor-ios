@@ -1,4 +1,5 @@
 import UIKit
+import Mixpanel
 
 class DetailViewController: UIViewController {
     var item: TrendingItem
@@ -30,17 +31,19 @@ class DetailViewController: UIViewController {
         
         detailView.configure(with: item)
         
-        FavoritesViewModel.shared.addObserver { [weak self] in
+        TrendingViewModel.shared.addObserver { [weak self] in
             guard let self = self else { return }
-            if let updated = FavoritesViewModel.shared.items.first(where: { $0.id == self.item.id }) {
+            if let updated = TrendingViewModel.shared.items.first(where: { $0.id == self.item.id }) {
                 self.item = updated
                 self.detailView.configure(with: updated)
                 self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: updated.isFavorite ? "heart.fill" : "heart")
             }
         }
+        
+        Mixpanel.mainInstance().track(event: "DetailView")
     }
     
     @objc private func didTapFavorite() {
-        FavoritesViewModel.shared.toggleFavorite(for: item)
+        TrendingViewModel.shared.toggleFavorite(for: item)
     }
 }

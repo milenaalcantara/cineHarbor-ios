@@ -1,7 +1,9 @@
 import UIKit
+import Mixpanel
 
 class TrendingViewController: UIViewController {
     private var items: [TrendingItem] = []
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -23,12 +25,14 @@ class TrendingViewController: UIViewController {
         
         setupCollectionView()
         
-        FavoritesViewModel.shared.addObserver { [weak self] in
-            self?.items = FavoritesViewModel.shared.items
+        TrendingViewModel.shared.addObserver { [weak self] in
+            self?.items = TrendingViewModel.shared.items
             self?.collectionView.reloadData()
         }
         
-        FavoritesViewModel.shared.fetchTrending()
+        TrendingViewModel.shared.fetchTrending()
+        
+        Mixpanel.mainInstance().track(event: "TrendingView")
     }
     
     private func setupCollectionView() {
@@ -75,7 +79,12 @@ extension TrendingViewController: TrendingCellDelegate {
     func trendingCellDidTapFavorite(_ cell: TrendingCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let item = items[indexPath.item]
-        FavoritesViewModel.shared.toggleFavorite(for: item)
+        TrendingViewModel.shared.toggleFavorite(for: item)
+        let dict = [
+            "streamTitle": item.title,
+            "isFavorite": "\(item.isFavorite)"
+        ]
+        Mixpanel.mainInstance().track(event: "Tap on favorite", properties: dict)
     }
     
     func trendingCellDidTapDetails(_ cell: TrendingCell) {
